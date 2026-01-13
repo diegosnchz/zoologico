@@ -51,9 +51,6 @@ async function startMonitoring() {
             document.getElementById('monitoringStatus').textContent = '▶️ Activo';
             document.getElementById('monitoringStatus').style.color = '#28a745';
             showSuccess('✓ ' + data.message);
-            
-            // Actualizar alertas más frecuentemente cuando está monitoreando
-            setInterval(loadAlerts, 3000);
         } else {
             showError('Error: ' + data.error);
         }

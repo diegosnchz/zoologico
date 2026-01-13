@@ -7,17 +7,22 @@ echo "======================================================================"
 echo ""
 
 # Verificar Python
-if ! command -v python &> /dev/null; then
+PYTHON_CMD=""
+if command -v python3 &> /dev/null; then
+    PYTHON_CMD="python3"
+elif command -v python &> /dev/null; then
+    PYTHON_CMD="python"
+else
     echo "❌ Error: Python no está instalado"
     exit 1
 fi
 
-echo "✓ Python encontrado: $(python --version)"
+echo "✓ Python encontrado: $($PYTHON_CMD --version)"
 
 # Instalar dependencias
 echo ""
 echo "📦 Instalando dependencias..."
-pip install -r requirements.txt --quiet
+$PYTHON_CMD -m pip install -r requirements.txt --quiet
 
 if [ $? -eq 0 ]; then
     echo "✓ Dependencias instaladas correctamente"
@@ -44,4 +49,4 @@ echo "======================================================================"
 echo ""
 
 # Iniciar servidor Flask
-python web_app.py
+$PYTHON_CMD web_app.py
