@@ -158,7 +158,8 @@ class TestTaskDelegation(unittest.TestCase):
     """Tests para verificar la delegación correcta de tareas."""
     
     def setUp(self):
-        self.coordinator = DistributedCoordinator()
+        self.config = Config()
+        self.coordinator = DistributedCoordinator(self.config)
         self.coordinator.initialize_system()
     
     def test_urgent_tasks_to_local(self):
