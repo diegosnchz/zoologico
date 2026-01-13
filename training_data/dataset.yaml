@@ -1,0 +1,27 @@
+# Configuración del dataset para detección de fugas de animales en zoológico
+# YOLO Dataset Configuration
+
+# Rutas del dataset
+path: training_data  # Ruta raíz del dataset
+train: images  # Ruta de imágenes de entrenamiento (relativa a 'path')
+val: images    # Ruta de imágenes de validación (relativa a 'path')
+
+# Clases de animales a detectar
+names:
+  0: animal_escape  # Animal fuera de su recinto (fuga)
+  1: elephant
+  2: giraffe
+  3: lion
+  4: tiger
+  5: bear
+  6: zebra
+  7: monkey
+
+# Número de clases
+nc: 8
+
+# Notas sobre el dataset:
+# - Las imágenes deben estar en formato JPG o PNG
+# - Las etiquetas deben estar en formato YOLO (archivos .txt)
+# - Cada línea en el archivo de etiqueta: <class_id> <x_center> <y_center> <width> <height>
+# - Coordenadas normalizadas (0-1)

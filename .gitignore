@@ -50,6 +50,17 @@ logs/
 instance/
 .webassets-cache
 
+# Training data (keep structure, ignore content)
+training_data/images/*.jpg
+training_data/images/*.jpeg
+training_data/images/*.png
+training_data/images/*.bmp
+training_data/labels/*.txt
+training_data/models/*
+!training_data/models/.gitkeep
+!training_data/images/README.md
+!training_data/labels/README.md
+
 # OS
 .DS_Store
 Thumbs.db

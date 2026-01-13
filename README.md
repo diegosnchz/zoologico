@@ -16,6 +16,37 @@ El sistema incluye una **aplicación web completa** para monitorear y gestionar 
 - 🏗️ **Vista de arquitectura** del sistema distribuido
 - 🎮 **Controles interactivos** para iniciar/detener monitoreo
 
+## 🎓 Entrenamiento del Modelo YOLO
+
+El sistema incluye herramientas completas para entrenar tu propio modelo YOLO personalizado:
+
+### Proceso de Entrenamiento
+
+1. **Preparar imágenes:**
+   ```bash
+   # Coloca tus imágenes en training_data/images/
+   python prepare_training_data.py
+   ```
+
+2. **Etiquetar imágenes:**
+   - Usa LabelImg, Roboflow o herramientas similares
+   - Formato YOLO: `<class_id> <x_center> <y_center> <width> <height>`
+   - Clases: 0=escape, 1=elephant, 2=giraffe, 3=lion, etc.
+
+3. **Entrenar modelo:**
+   ```bash
+   python train_model.py
+   # Selecciona: Entrenamiento completo (50 épocas)
+   ```
+
+4. **Integrar modelo entrenado:**
+   ```bash
+   export YOLO_MODEL_PATH=training_data/models/animal_escape_detector.pt
+   python web_app.py
+   ```
+
+📖 **[Guía Completa de Entrenamiento](training_data/TRAINING_GUIDE.md)**
+
 ## 📋 Descripción
 
 Este sistema implementa una arquitectura de computación distribuida que combina:
