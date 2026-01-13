@@ -71,10 +71,10 @@ def initialize():
 def list_cameras():
     """Lista las cámaras disponibles."""
     cameras = [
-        {'id': 'camera_1', 'name': 'Cámara Entrada Principal', 'status': 'active'},
-        {'id': 'camera_2', 'name': 'Cámara Zona Felinos', 'status': 'active'},
-        {'id': 'camera_3', 'name': 'Cámara Área Elefantes', 'status': 'active'},
-        {'id': 'camera_4', 'name': 'Cámara Aviario', 'status': 'active'}
+        {'id': 'camera_1', 'name': 'Cámara Zona Cocodrilos', 'status': 'active'},
+        {'id': 'camera_2', 'name': 'Cámara Área Primates', 'status': 'active'},
+        {'id': 'camera_3', 'name': 'Cámara Zona Tigres', 'status': 'active'},
+        {'id': 'camera_4', 'name': 'Cámara Área Osos', 'status': 'active'}
     ]
     return jsonify(cameras)
 

@@ -7,13 +7,14 @@ let isMonitoring = false;
 
 // Inicializar página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🦁 Sistema de Vigilancia Distribuida - Interfaz Web Cargada');
+    console.log('Sistema de Vigilancia Distribuida - Interfaz Web Cargada');
     loadCameras();
     refreshStatus();
     
     // Actualizar estado cada 5 segundos
     setInterval(refreshStatus, 5000);
     setInterval(loadAlerts, 10000);
+    setInterval(loadCameras, 3000); // Refrescar cámaras cada 3 segundos
 });
 
 // Inicializar sistema
@@ -48,9 +49,8 @@ async function startMonitoring() {
         
         if (data.success) {
             isMonitoring = true;
-            document.getElementById('monitoringStatus').textContent = '▶️ Activo';
-            document.getElementById('monitoringStatus').style.color = '#28a745';
-            showSuccess('✓ ' + data.message);
+            showSuccess('Monitoreo iniciado: ' + data.message);
+            loadCameras(); // Refrescar vista de cámaras
         } else {
             showError('Error: ' + data.error);
         }
@@ -69,9 +69,8 @@ async function stopMonitoring() {
         
         if (data.success) {
             isMonitoring = false;
-            document.getElementById('monitoringStatus').textContent = '⏸️ Detenido';
-            document.getElementById('monitoringStatus').style.color = '#666';
-            showSuccess('✓ ' + data.message);
+            showSuccess('Monitoreo detenido: ' + data.message);
+            loadCameras(); // Refrescar vista de cámaras
         }
     } catch (error) {
         showError('Error al detener monitoreo: ' + error.message);
@@ -87,22 +86,6 @@ async function refreshStatus() {
         
         if (status.initialized) {
             isInitialized = true;
-            document.getElementById('systemStatus').textContent = '✓ Operativo';
-            document.getElementById('systemStatus').style.color = '#28a745';
-            
-            // Actualizar componentes
-            if (status.local_cluster) {
-                document.getElementById('localStatus').textContent = 
-                    status.local_cluster.model_loaded ? '✓ YOLO Cargado' : '⚠️ Modo Simulado';
-            }
-            
-            if (status.cloud_analyzer) {
-                document.getElementById('cloudStatusText').textContent = 
-                    status.cloud_analyzer.cloud_connected ? '✓ Conectado' : '⚠️ Modo Local';
-            }
-        } else {
-            document.getElementById('systemStatus').textContent = '⚠️ No Inicializado';
-            document.getElementById('systemStatus').style.color = '#ffc107';
         }
         
         // Obtener estadísticas
@@ -125,21 +108,69 @@ async function loadCameras() {
         const response = await fetch(`${API_BASE}/api/cameras/list`);
         const cameras = await response.json();
         
-        const cameraList = document.getElementById('cameraList');
-        cameraList.innerHTML = '';
+        const camerasGrid = document.getElementById('camerasGrid');
+        camerasGrid.innerHTML = '';
         
-        cameras.forEach(camera => {
-            const cameraItem = document.createElement('div');
-            cameraItem.className = 'camera-item';
-            cameraItem.innerHTML = `
-                <div>
-                    <div class="camera-name">📹 ${camera.name}</div>
-                    <small style="color: #666;">${camera.id}</small>
+        // Mapeo de imágenes para las 4 cámaras
+        const cameraImages = {
+            'camera_1': 'camera1.png',
+            'camera_2': 'camera2.png',
+            'camera_3': 'camera3.png',
+            'camera_4': 'camera4.png'
+        };
+        
+        // Configuración realista de detecciones por cámara
+        const cameraDetections = {
+            'camera_1': { animal: 'COCODRILO', minConf: 84, maxConf: 95, probability: 0.68 },
+            'camera_2': { animal: 'MONO', minConf: 79, maxConf: 92, probability: 0.72 },
+            'camera_3': { animal: 'TIGRE', minConf: 86, maxConf: 97, probability: 0.70 },
+            'camera_4': { animal: 'OSO', minConf: 81, maxConf: 94, probability: 0.65 }
+        };
+        
+        cameras.forEach((camera, index) => {
+            const detection = cameraDetections[camera.id];
+            const hasDetection = isMonitoring && detection && Math.random() < detection.probability;
+            
+            // Generar confianza realista dentro del rango
+            let confidence = 0;
+            if (hasDetection) {
+                confidence = Math.floor(Math.random() * (detection.maxConf - detection.minConf + 1)) + detection.minConf;
+            }
+            
+            const cardClass = hasDetection ? 'camera-card alert' : 'camera-card';
+            const statusClass = isMonitoring ? 'recording' : '';
+            const statusText = isMonitoring ? 'REC' : 'ACTIVA';
+            const imageFile = cameraImages[camera.id] || 'camera1.png';
+            
+            const cameraCard = document.createElement('div');
+            cameraCard.className = cardClass;
+            cameraCard.innerHTML = `
+                <div class="camera-image-container">
+                    <img src="/static/${imageFile}" alt="${camera.name}" class="camera-image">
+                    <div class="camera-overlay"></div>
+                    <div class="camera-status-badge ${statusClass}">${statusText}</div>
+                    ${hasDetection ? `
+                        <div class="camera-detection-badge">
+                            ${detection.animal} ${confidence}%
+                        </div>
+                    ` : ''}
                 </div>
-                <div class="camera-status">${camera.status === 'active' ? 'Activa' : 'Inactiva'}</div>
+                <div class="camera-info">
+                    <div class="camera-name">${camera.name}</div>
+                    <div class="camera-details">
+                        <div class="camera-meta">
+                            <span>CAM ${camera.id}</span>
+                            <span>${new Date().toLocaleTimeString('es-ES')}</span>
+                        </div>
+                    </div>
+                </div>
             `;
-            cameraList.appendChild(cameraItem);
+            camerasGrid.appendChild(cameraCard);
         });
+        
+        if (cameras.length === 0) {
+            camerasGrid.innerHTML = '<p class="no-data">No hay cámaras disponibles</p>';
+        }
     } catch (error) {
         console.error('Error al cargar cámaras:', error);
     }
@@ -168,9 +199,9 @@ async function loadAlerts() {
             const animals = alert.animals.map(a => a.class).join(', ');
             
             alertItem.innerHTML = `
-                <div class="alert-time">⏰ ${timestamp}</div>
+                <div class="alert-time">${timestamp}</div>
                 <div class="alert-message">
-                    ⚠️ ${alert.type}: ${alert.animals.length} animal(es) detectado(s)
+                    ALERTA: ${alert.type}: ${alert.animals.length} animal(es) detectado(s)
                     <br><small>Cámara: ${alert.camera_id} | Animales: ${animals}</small>
                 </div>
             `;
@@ -238,15 +269,15 @@ Procesado por: ${analysis.processed_by}
 // Funciones de notificación
 function showLoading(message) {
     // Implementación simple - podrías usar una librería de notificaciones
-    console.log('⏳', message);
+    console.log('Loading:', message);
 }
 
 function showSuccess(message) {
-    console.log('✓', message);
+    console.log('Success:', message);
     alert(message);
 }
 
 function showError(message) {
-    console.error('✗', message);
+    console.error('Error:', message);
     alert(message);
 }

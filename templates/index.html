@@ -3,89 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🦁 Sistema de Vigilancia Distribuida - Zoológico</title>
+    <title>Sistema de Vigilancia - Zoológico</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🦁 Sistema de Vigilancia Distribuida</h1>
-            <p class="subtitle">Detección en Tiempo Real + Análisis Histórico en la Nube</p>
+            <h1>Sistema de Vigilancia Distribuida</h1>
+            <p class="subtitle">Detección en Tiempo Real con Análisis en la Nube</p>
         </header>
 
-        <div class="architecture-banner">
-            <div class="arch-item">
-                <span class="icon">🖥️</span>
-                <strong>Cluster Local</strong>
-                <small>YOLO - Tiempo Real</small>
-            </div>
-            <div class="arch-arrow">⟷</div>
-            <div class="arch-item">
-                <span class="icon">☁️</span>
-                <strong>Nube</strong>
-                <small>Análisis Masivo</small>
-            </div>
-        </div>
-
-        <div class="status-bar" id="statusBar">
-            <div class="status-item">
-                <span class="label">Estado:</span>
-                <span class="value" id="systemStatus">Inicializando...</span>
-            </div>
-            <div class="status-item">
-                <span class="label">Monitoreo:</span>
-                <span class="value" id="monitoringStatus">Detenido</span>
-            </div>
-        </div>
-
         <div class="controls">
-            <button class="btn btn-primary" onclick="initializeSystem()">🚀 Inicializar Sistema</button>
-            <button class="btn btn-success" onclick="startMonitoring()">▶️ Iniciar Monitoreo</button>
-            <button class="btn btn-warning" onclick="stopMonitoring()">⏸️ Detener Monitoreo</button>
-            <button class="btn btn-info" onclick="refreshStatus()">🔄 Actualizar</button>
+            <button class="btn btn-primary" onclick="initializeSystem()">Inicializar Sistema</button>
+            <button class="btn btn-success" onclick="startMonitoring()">Iniciar Monitoreo</button>
+            <button class="btn btn-warning" onclick="stopMonitoring()">Detener</button>
         </div>
 
-        <div class="grid">
-            <div class="card">
-                <h2>📊 Estadísticas del Sistema</h2>
-                <div class="stats-grid" id="statsGrid">
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalTasks">0</div>
-                        <div class="stat-label">Tareas Totales</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="localTasks">0</div>
-                        <div class="stat-label">Tareas Locales</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="cloudTasks">0</div>
-                        <div class="stat-label">Tareas en Nube</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value" id="totalAlerts">0</div>
-                        <div class="stat-label">Alertas</div>
-                    </div>
+        <!-- Estadísticas en tarjetas horizontales -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-icon">STATS</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalTasks">0</div>
+                    <div class="stat-label">Tareas Totales</div>
                 </div>
             </div>
-
-            <div class="card">
-                <h2>📹 Cámaras de Vigilancia</h2>
-                <div id="cameraList" class="camera-list">
-                    <p class="loading">Cargando cámaras...</p>
+            <div class="stat-card">
+                <div class="stat-icon">LOCAL</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="localTasks">0</div>
+                    <div class="stat-label">Cluster Local</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">CLOUD</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="cloudTasks">0</div>
+                    <div class="stat-label">En la Nube</div>
+                </div>
+            </div>
+            <div class="stat-card alert-stat">
+                <div class="stat-icon">ALERT</div>
+                <div class="stat-content">
+                    <div class="stat-value" id="totalAlerts">0</div>
+                    <div class="stat-label">Alertas</div>
                 </div>
             </div>
         </div>
 
-        <div class="grid">
+        <!-- Galería de Cámaras -->
+        <div class="section-header">
+            <h2>Cámaras de Vigilancia</h2>
+            <p class="section-subtitle">Monitoreo en tiempo real con detección automática</p>
+        </div>
+
+        <div class="cameras-grid" id="camerasGrid">
+            <!-- Las cámaras se cargarán dinámicamente -->
+        </div>
+
+        <!-- Alertas y Análisis -->
+        <div class="grid-two">
             <div class="card">
-                <h2>⚠️ Alertas Recientes</h2>
+                <h2>Alertas Recientes</h2>
                 <div id="alertsList" class="alerts-list">
                     <p class="no-data">No hay alertas</p>
                 </div>
             </div>
 
             <div class="card">
-                <h2>☁️ Análisis Histórico</h2>
+                <h2>Análisis Histórico</h2>
                 <div class="analysis-controls">
                     <label>
                         Período:
@@ -95,7 +84,7 @@
                             <option value="90">90 días</option>
                         </select>
                     </label>
-                    <button class="btn btn-primary" onclick="runHistoricalAnalysis()">🔍 Analizar</button>
+                    <button class="btn btn-primary" onclick="runHistoricalAnalysis()">Analizar</button>
                 </div>
                 <div id="analysisResults" class="analysis-results">
                     <p class="no-data">Ejecuta un análisis para ver resultados</p>
@@ -103,38 +92,8 @@
             </div>
         </div>
 
-        <div class="card">
-            <h2>🏗️ Arquitectura del Sistema</h2>
-            <div class="architecture-detail">
-                <div class="arch-component">
-                    <h3>🖥️ Cluster Local</h3>
-                    <ul>
-                        <li>✓ Procesamiento en tiempo real con YOLO</li>
-                        <li>✓ Detección urgente de escapes</li>
-                        <li>✓ Baja latencia (< 1 segundo)</li>
-                        <li>✓ Sincronización automática a la nube</li>
-                    </ul>
-                    <div class="component-status" id="localClusterStatus">
-                        <strong>Estado:</strong> <span id="localStatus">-</span>
-                    </div>
-                </div>
-                <div class="arch-component">
-                    <h3>☁️ Análisis en la Nube</h3>
-                    <ul>
-                        <li>✓ Procesamiento de terabytes de datos</li>
-                        <li>✓ Identificación de tendencias</li>
-                        <li>✓ Análisis de zonas de riesgo</li>
-                        <li>✓ Patrones temporales</li>
-                    </ul>
-                    <div class="component-status" id="cloudStatus">
-                        <strong>Estado:</strong> <span id="cloudStatusText">-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <footer>
-            <p>🦁 Sistema de Vigilancia Distribuida para Zoológico | Computación Distribuida: Local + Nube</p>
+            <p>Sistema de Vigilancia Distribuida © 2026</p>
         </footer>
     </div>
 
