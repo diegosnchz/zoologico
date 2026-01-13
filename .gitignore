@@ -46,6 +46,10 @@ data/
 logs/
 *.log
 
+# Flask
+instance/
+.webassets-cache
+
 # OS
 .DS_Store
 Thumbs.db

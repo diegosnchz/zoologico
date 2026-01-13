@@ -2,6 +2,20 @@
 
 Sistema de computación distribuida para detección de escapes de animales en tiempo real y análisis histórico de patrones.
 
+## 🌐 Interfaz Web
+
+El sistema incluye una **aplicación web completa** para monitorear y gestionar el sistema de vigilancia:
+
+![Sistema de Vigilancia Web](https://github.com/user-attachments/assets/8581b7b8-950a-4331-8d08-a186794cd8c0)
+
+### Características de la Interfaz Web:
+- 📊 **Dashboard en tiempo real** con estadísticas del sistema
+- 📹 **Monitoreo de cámaras** con estado en vivo
+- ⚠️ **Panel de alertas** para escapes detectados
+- ☁️ **Análisis histórico** con reportes visuales
+- 🏗️ **Vista de arquitectura** del sistema distribuido
+- 🎮 **Controles interactivos** para iniciar/detener monitoreo
+
 ## 📋 Descripción
 
 Este sistema implementa una arquitectura de computación distribuida que combina:
@@ -96,13 +110,34 @@ DATA_SYNC_INTERVAL=3600
 
 ## 💻 Uso
 
-### Ejecución del sistema completo
+### Opción 1: Interfaz Web (Recomendado)
+
+La forma más fácil de usar el sistema es a través de la interfaz web:
+
+```bash
+# Desplegar e iniciar la aplicación web
+./start_web.sh
+
+# O directamente con Python
+python web_app.py
+```
+
+Luego abre tu navegador en: **http://localhost:5000**
+
+La interfaz web proporciona:
+- Control completo del sistema (inicializar, monitorear, detener)
+- Visualización de estadísticas en tiempo real
+- Monitoreo de 4 cámaras simultáneamente
+- Panel de alertas de escapes
+- Análisis histórico con reportes visuales
+
+### Opción 2: Ejecución del sistema completo (CLI)
 
 ```bash
 python main.py
 ```
 
-### Uso programático
+### Opción 3: Uso programático
 
 ```python
 from distributed_coordinator import DistributedCoordinator
