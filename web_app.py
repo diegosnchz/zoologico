@@ -234,5 +234,5 @@ if __name__ == '__main__':
     # Inicializar sistema al arrancar
     initialize_system()
     
-    # Iniciar servidor Flask
-    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
+    # Iniciar servidor Flask (sin debug mode en producción)
+    app.run(host='0.0.0.0', port=5000, debug=False, use_reloader=False)
